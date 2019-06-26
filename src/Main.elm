@@ -69,12 +69,29 @@ view model =
             text ""
 
         Game gameState ->
-            gameState
-                |> GameState.deck
-                |> viewCards
+            viewGame gameState
 
         GameOver gameOverState ->
             text "Game over"
+
+
+viewGame : GameState -> Html Msg
+viewGame gameState =
+    div []
+        [ gameState
+            |> GameState.deck
+            |> viewCards
+        , viewScore gameState
+        ]
+
+
+viewScore : GameState -> Html msg
+viewScore gameState =
+    gameState
+        |> GameState.score
+        |> String.fromInt
+        |> (++) "Score: "
+        |> text
 
 
 viewCards : Deck -> Html Msg
