@@ -1,4 +1,4 @@
-module GameState exposing (GameState(..), clickCard, deck)
+module GameState exposing (GameState, clickCard, deck, init)
 
 import Deck exposing (..)
 
@@ -7,6 +7,11 @@ type GameState
     = Choosing Deck
     | Matching Card Deck
     | GameOver Deck
+
+
+init : Deck -> GameState
+init cards =
+    Choosing cards
 
 
 deck : GameState -> Deck

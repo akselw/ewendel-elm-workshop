@@ -13,8 +13,14 @@ import Random
 --- Model
 
 
-type alias Model =
-    GameState
+type Model
+    = Initializing
+    | Game GameState
+    | GameOver GameOverState
+
+
+type alias GameOverState =
+    Int
 
 
 
@@ -30,10 +36,21 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         CardClick clickedCard ->
-            ( GameState.clickCard clickedCard model, Cmd.none )
+            case model of
+                Game gameState ->
+                    ( GameState.clickCard clickedCard gameState
+                        |> Game
+                    , Cmd.none
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
 
         DeckGenerated deck ->
-            ( Choosing deck, Cmd.none )
+            ( GameState.init deck
+                |> Game
+            , Cmd.none
+            )
 
 
 setCard : CardState -> Card -> Card
@@ -47,9 +64,17 @@ setCard cardState card =
 
 view : Model -> Html Msg
 view model =
-    model
-        |> GameState.deck
-        |> viewCards
+    case model of
+        Initializing ->
+            text ""
+
+        Game gameState ->
+            gameState
+                |> GameState.deck
+                |> viewCards
+
+        GameOver gameOverState ->
+            text "Game over"
 
 
 viewCards : Deck -> Html Msg
@@ -89,7 +114,7 @@ type alias Flags =
 
 init : Flags -> ( Model, Cmd Msg )
 init _ =
-    ( Choosing Deck.static, Random.generate DeckGenerated Deck.random )
+    ( Initializing, Random.generate DeckGenerated Deck.random )
 
 
 
