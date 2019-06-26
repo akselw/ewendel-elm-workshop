@@ -1,8 +1,29 @@
-module DeckGenerator exposing (random, static)
+module Deck exposing (Card, CardState(..), Deck, Group(..), random, static)
 
-import Model exposing (Card, CardState(..), Deck, Group(..))
 import Random
 import Random.List
+
+
+type alias Deck =
+    List Card
+
+
+type alias Card =
+    { id : String
+    , state : CardState
+    , group : Group
+    }
+
+
+type CardState
+    = Open
+    | Closed
+    | Matched
+
+
+type Group
+    = A
+    | B
 
 
 random : Random.Generator Deck

@@ -1,6 +1,6 @@
 module Main exposing (main)
 
-import DeckGenerator
+import Deck
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
